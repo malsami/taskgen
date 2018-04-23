@@ -36,11 +36,14 @@ class Task(dict):
             # default values
             "id" : None,
             "priority" : None,
+            "deadline" : None,
 
             # blob values
             "quota" : None,
             "pkg" : None,
-            "config" : None,
+            "config" : {
+                "arg1" : None
+            },
 
             # periodic task
             "period" : None,
@@ -51,9 +54,11 @@ class Task(dict):
 
         # stores all job data (added during runtime of this task)
         self.jobs = []
-        
+        #print("Task.py: init: blocks: {}".format(blocks))
+        #print("############################################")
         # add inital blocks
         for block in blocks:
+            #print("Task.py: init: block: {}".format(block))
             if callable(block):
                 block = block()
 #            if not isinstance(attr, dict):
@@ -89,14 +94,16 @@ class Task(dict):
         `taskgen.taskset.TaskSet`.
 
         """
-        
+        #print("#########################################")
+        #print("before_flat: {}".format(self))
         flat = flatdict.FlatDict(self)
-
+        #print("Task.py: flat(self) is: {}".format(flat))
         # make everything to an iterator, except iterators. Pay attention:
         # strings are wrapped with an iterator again.
         iters = map(lambda x: [x] if not isinstance(x, Iterable) or
                     isinstance(x, str) else x, flat.itervalues())
         keys = flat.keys()
+        #print("Task.py: flat.keys() is: {}".format(keys))
         
         for values in itertools.product(*iters):
             # update dictionary with the new combined values. This is done by
@@ -104,6 +111,7 @@ class Task(dict):
             flat.update(dict(zip(keys, values)))
             
             # create new task
+            #print("####Task.py: flat.as_dict() is: {}".format(flat.as_dict()))
             yield Task(flat.as_dict())
 
     def binary(self):

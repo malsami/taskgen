@@ -1,5 +1,5 @@
 coloredlogs==7.3.1
-flatdict==2.0.1
+flatdict==3.0.0
 humanfriendly==4.6
 pymongo==3.6.0
 simpy==2.3.1

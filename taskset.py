@@ -47,8 +47,11 @@ class TaskSet(Iterable):
         variant.
 
         """
+        #print("Variants was coalled")
         tasks_iters = map(lambda x: x.variants(), self._tasks)
+        
         for tasks_variant in itertools.product(*tasks_iters):
+            #print("taskset.py: variants: tasks_variant: {}".format(list(tasks_variant)))
             yield TaskSet(list(tasks_variant))
 
     def description(self):
@@ -58,9 +61,7 @@ class TaskSet(Iterable):
         :rtype: dict
         """
         return {
-            "taskset" : {
-                "periodictask" : self._tasks
-            }
+            "taskset" :  self._tasks
         }
 
     def binaries(self):
