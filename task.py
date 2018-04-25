@@ -15,7 +15,7 @@ class Job:
     def __init__(self):
         self.start_date = None
         self.end_date = None
-
+        self.exit_value = None
     def is_running(self):
         return self.end_date is None
 
