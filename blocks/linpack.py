@@ -7,7 +7,7 @@ import random
 def Value(arg1):
     return {
         "pkg" : "linpack",
-        "quota" : "1M", # not sure, if enough...
+        "quota" : "10M",
         "config" : {
             "arg1" : arg1
         }
@@ -23,6 +23,6 @@ def Random(n):
 
 
 def Variants(variants):
-    return Value(range(variants))
+    return Value(range(1,variants))
 
 

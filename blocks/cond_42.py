@@ -8,7 +8,7 @@ Fulfills the condition, which terminates the program without counting.
 def Value(arg1):
     return {
         "pkg" : "cond_mod",
-        "quota" : "1M",
+        "quota" : "10M",
         "config" : {
             "arg1" : arg1
         }
@@ -33,4 +33,4 @@ def Random(n):
 Creates variants of looping.
 """
 def Variants(variants):
-    return Value(range(variants))
+    return Value(range(1,variants))

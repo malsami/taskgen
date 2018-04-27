@@ -4,7 +4,7 @@ Prints out `hey: Hello!`
 
 def Value(arg1):
 	return {
-    	"pkg" : "hey",
+    	"pkg" : "namaste",
     	"quota" : "10M",
     	"config" : {
             "arg1" : arg1

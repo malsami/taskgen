@@ -1,15 +1,15 @@
 import random
-from taskgen.blocks import hey,cond_mod,cond_42,idle,pi,linpack,tumatmul
+from taskgen.blocks import *
 
 """
 Returns a list of all binary and randomized values.
 """
 def Random(par1_max):
     return [
-        hey.HelloWorld,
+        hey.Value(parl_max),
         cond_mod.Random(par1_max),
         cond_42.Random(par1_max),
-        idle.Idle,
+        namaste.Value(parl_max),
         pi.Random(par1_max),
         linpack.Random(par1_max),
         tumatmul.Random(par1_max),
