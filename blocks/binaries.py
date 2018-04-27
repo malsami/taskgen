@@ -1,5 +1,5 @@
 import random
-from taskgen.blocks import *
+from taskgen.blocks import hey,namaste,cond_mod,cond_42,pi,linpack,tumatmul
 
 """
 Returns a list of all binary and randomized values.
