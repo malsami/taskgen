@@ -39,7 +39,7 @@ class Task(dict):
             "deadline" : None,
 
             # blob values
-            "quota" : 10M, #default value, in case no other is set
+            "quota" : '10M', #default value, in case no other is set
             "pkg" : None,
             "config" : {
                 "arg1" : None
