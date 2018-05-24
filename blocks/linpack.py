@@ -7,7 +7,6 @@ import random
 def Value(arg1):
     return {
         "pkg" : "linpack",
-        "quota" : "10M",
         "config" : {
             "arg1" : arg1
         }

@@ -8,7 +8,6 @@ import random
 def Value(arg1):
     return {
         "pkg" : "pi",
-        "quota" : "10M",
         "config" : {
             "arg1" : arg1
         }

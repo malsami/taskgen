@@ -7,7 +7,6 @@ Fulfills the condition, which terminates the program without counting.
 def Value(arg1):
     return {
         "pkg" : "cond_mod",
-        "quota" : "10M",
         "config" : {
             "arg1" : arg1
         }
@@ -30,7 +29,7 @@ def Break():
 The break condition is chosen randomly.
 """
 def RandomBreak():
-    return Value(random.randint(0, 100)*2)
+    return Value(random.randint(0, 1000000)*2)
 
 """
 Creates variants of looping.

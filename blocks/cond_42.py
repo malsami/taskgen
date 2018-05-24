@@ -7,8 +7,7 @@ Fulfills the condition, which terminates the program without counting.
 """
 def Value(arg1):
     return {
-        "pkg" : "cond_mod",
-        "quota" : "10M",
+        "pkg" : "cond_42",
         "config" : {
             "arg1" : arg1
         }
