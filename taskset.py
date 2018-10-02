@@ -20,9 +20,11 @@ class TaskSet(Iterable):
 
         :param tasks [Task]: Initialize a task-set from a list of tasks.
         """
-        self._tasks = tasks
+        self._tasks = []
         self._task_counter = 0
-
+        for t in tasks:
+            self.append(t)
+        
     def __iter__(self):
         """Iterator for iterating over all tasks"""
         return self._tasks.__iter__()
