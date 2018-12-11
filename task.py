@@ -82,7 +82,7 @@ class Task(dict):
     def binary(self):
         """Binary of the task
         
-        Every task has a binary. This method returns it.
+        Every task has a binary. This method returns the name of the package, thus the name of the binary.
 
         :return: binary of the task
         :rtype: str
