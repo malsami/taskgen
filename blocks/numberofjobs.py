@@ -1,6 +1,6 @@
 import random
 
-def Value(numberofjobs):
+def Value(numberofjobs=1):
     return {
         "numberofjobs" : numberofjobs
     }

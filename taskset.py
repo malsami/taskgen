@@ -1,14 +1,7 @@
 """Module for task-set implementation
 
 """
-
-import xmltodict
 from collections.abc import Iterable
-from abc import ABCMeta, abstractmethod
-import itertools
-import random
-
-from taskgen.task import Task
 
 
 
@@ -25,13 +18,20 @@ class TaskSet(Iterable):
         for t in tasks:
             self.append(t)
         
+
     def __iter__(self):
         """Iterator for iterating over all tasks"""
         return self._tasks.__iter__()
     
+
     def __str__(self):
         return self._tasks.__str__()
+
+
+    def __repr__(self):
+        return str(self)
         
+
     def append(self, task):
         """Append task to this task-sets
 
@@ -42,19 +42,6 @@ class TaskSet(Iterable):
         self._task_counter += 1
         self._tasks.append(task)
 
-    def variants(self):
-        """Generator for generating all variants of this task-set.
-
-        The Generator returns new TaskSet objects. Each TaskSet is a unique
-        variant.
-
-        """
-        #print("Variants was coalled")
-        tasks_iters = map(lambda x: x.variants(), self._tasks)
-        
-        for tasks_variant in itertools.product(*tasks_iters):
-            #print("taskset.py: variants: tasks_variant: {}".format(list(tasks_variant)))
-            yield TaskSet(list(tasks_variant))
 
     def description(self):
         """Description of the task-set
@@ -66,6 +53,7 @@ class TaskSet(Iterable):
             "taskset" :  self._tasks
         }
 
+
     def binaries(self):
         """List of used binaries
         
@@ -73,50 +61,4 @@ class TaskSet(Iterable):
         :rtype: (str, str,...)
         """
         return set(map(lambda x: x.binary(), self._tasks))
-
-    
-
-class BlockTaskSet(TaskSet):
-    """Generates a TaskSet from Task-Blocks. 
-
-    A Task-Block is a python dict and describes a part of a task. Passing a list
-    of Task-Blocks results in task-set with variants.  Each Task-Block of the
-    list is one variant.
-
-    Example
-    =======
-    A1 = period.Custom(1)
-    A2 = period.Custom(2)
-    B1 = priority.Custom(10)
-
-    # TaskSets with one Variant
-    BlockTaskSet(A1, B1)
-    BlockTaskSet(A1)
-
-    # TaskSet with 2 variants
-    BlockTaskSet([A1, A2], B1)
-
-    # TaskSet with 4 variants
-    BlockTaskSet([A1, A2], [B1, B1])
-
-    :param *block_combinations: number of Task-Blocks as parameters
-    :param task_class: Class of task for generation.
-    :param seed int: Seed for the randomness generator.
-
-    """
-    def __init__(self, *block_combinations, task_class=Task, seed=None):
-        super().__init__()
-        random.seed(seed)
-        
-        # wrap every argument, which is not of type list, with a list-object:
-        # example: x->[x]
-        block_combinations = map(lambda x: [x] if not isinstance(x, list) else x,
-                                 list(block_combinations))
-        
-        for blocks in itertools.product(*block_combinations):
-            # create a task from the block combinations and append it to the
-            # taskset
-            task = task_class(*blocks)
-            self.append(task)
-
 

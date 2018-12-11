@@ -1,23 +1,6 @@
 """This module implements the task"""
+from collections.abc import Iterable
 
-
-
-from collections.abc import Mapping
-from abc import ABCMeta, abstractmethod
-import flatdict
-import itertools
-from collections import Iterable
-import flatdict
-
-
-class Job:
-    
-    def __init__(self):
-        self.start_date = None
-        self.end_date = None
-        self.exit_value = None
-    def is_running(self):
-        return self.end_date is None
 
 
 class Task(dict):
@@ -34,36 +17,45 @@ class Task(dict):
     def __init__(self, *blocks):
         super().__init__({
             # default values
-            "id" : None,
-            "priority" : None,
-            "deadline" : None,
+            'id' : None,
+            'priority' : 128, # 0:high - 127:low - 128 ignore -> use deadline
+            'deadline' : 1, # 0:stupid value
 
             # blob values
-            "quota" : '10M', #default value, in case no other is set
-            "pkg" : None,
-            "config" : {
-                "arg1" : None
+            'quota' : '0M', #init value will fail, has to be set
+            'caps' : 0, # has to be set - known working value is 235
+            'pkg' : '', # has to be not empty
+            'config' : {
+                'arg1' : 0 # will work, but does not make sense
             },
 
+            # sets how many cores are available on the target machine
+            'cores' : 2, # default is set to two, but depends on hardware
+
+            # sets an offset from the core the parent is running on
+            'coreoffset' : 1, # can't be negative, default is different core than parent
+
+            # critical time - to ensure startup at next period
+            'criticaltime' : 0, # 0 is ignore
             # periodic task
-            "period" : None,
+            'period' : 1, # 0 does not make sense but will not break genode
             
-            "numberofjobs" : 1
-            # "offset" : None, unused at genode side.
+            'numberofjobs' : 1, # cant be smaller than 1
+            'offset' : 0, 
+            # stores all job data (added during runtime of this task)
+            'jobs' : {
+                # '1' : [start_date, end_date, exit_value] as an example for format
+            }
         })
 
-        # stores all job data (added during runtime of this task)
-        self.jobs = []
-        #print("Task.py: init: blocks: {}".format(blocks))
-        #print("############################################")
         # add inital blocks
         for block in blocks:
-            #print("Task.py: init: block: {}".format(block))
             if callable(block):
                 block = block()
-#            if not isinstance(attr, dict):
-#                raise ValueError("An attribute for a task must be dict.")
+            # if not isinstance(attr, dict):
+            #     raise ValueError("An attribute for a task must be dict.")
             super().update(block)
+
 
     @property
     def id(self):
@@ -73,9 +65,9 @@ class Task(dict):
         task for an event.
 
         """
-        
         return self['id']
-            
+
+ 
     @id.setter
     def id(self, _id):
         """Setter for the task id
@@ -84,35 +76,8 @@ class Task(dict):
         task-set, an unique id is assigned to the task.
 
         """
-        
         self['id'] = _id
 
-    def variants(self):
-        """Generator for task variants
-        
-        This method generates all variants of a task and is used by
-        `taskgen.taskset.TaskSet`.
-
-        """
-        #print("#########################################")
-        #print("before_flat: {}".format(self))
-        flat = flatdict.FlatDict(self)
-        #print("Task.py: flat(self) is: {}".format(flat))
-        # make everything to an iterator, except iterators. Pay attention:
-        # strings are wrapped with an iterator again.
-        iters = map(lambda x: [x] if not isinstance(x, Iterable) or
-                    isinstance(x, str) else x, flat.itervalues())
-        keys = flat.keys()
-        #print("Task.py: flat.keys() is: {}".format(keys))
-        
-        for values in itertools.product(*iters):
-            # update dictionary with the new combined values. This is done by
-            # mapping all keys to their values.
-            flat.update(dict(zip(keys, values)))
-            
-            # create new task
-            #print("####Task.py: flat.as_dict() is: {}".format(flat.as_dict()))
-            yield Task(flat.as_dict())
 
     def binary(self):
         """Binary of the task

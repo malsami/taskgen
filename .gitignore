@@ -1,2 +1,4 @@
 /__pycache__
 /blocks/__pycache__
+*.pyc
+/blocks/*.pyc
